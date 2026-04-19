@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {% if person %}แก้ไขข้อมูลประชาชน{% else %}แบบฟอร์มบันทึกข้อมูลประชาชน{% endif %}
+{% endblock %}
+
+{% block content %}
+
+<style>
+.form-card {
+    max-width: 450px;
+    margin: 60px auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    overflow: hidden;
+}
+
+.form-header {
+    background-color: #be610b; /* แก้ไขเครื่องหมาย # */
+    color: white;
+    padding: 15px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.btn-save {
+    background-color: #be610b;
+    color: white;
+}
+
+.btn-save:hover {
+    background-color: #964d09;
+    color: white;
+}
+
+.btn-clear {
+    background-color: #6c757d;
+    color: white;
+}
+</style>
+
+<div class="card form-card">
+    <div class="form-header">
+        {% if person %}
+            แก้ไขข้อมูล: {{ person.name }}
+        {% else %}
+            แบบฟอร์มบันทึกข้อมูลเข้าสู่ระบบ
+        {% endif %}
+    </div>
+
+    <div class="card-body">
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label class="form-label">ชื่อและนามสกุล</label>
+                <input type="text" class="form-control" name="name" 
+                       value="{{ person.name|default:'' }}" 
+                       placeholder="กรุณากรอกชื่อ-นามสกุล" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">อายุ</label>
+                <input type="number" class="form-control" name="age" 
+                       value="{{ person.age|default:'' }}" 
+                       placeholder="กรอกข้อมูลอายุเป็นตัวเลข" required>
+            </div>
+
+            <div class="d-flex justify-content-center gap-2">
+                <button type="submit" class="btn btn-save">
+                    {% if person %}บันทึกการแก้ไข{% else %}ลงทะเบียน{% endif %}
+                </button>
+                {% if not person %}
+                    <button type="reset" class="btn btn-clear">ล้างข้อมูล</button>
+                {% else %}
+                    <a href="/" class="btn btn-clear">ยกเลิก</a>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
